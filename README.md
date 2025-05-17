@@ -1,2 +1,2 @@
-# TCC-Prodígio em Ascenção
+# TCC-Prodígio em Ascensão
 TCC de Marco e Cida
