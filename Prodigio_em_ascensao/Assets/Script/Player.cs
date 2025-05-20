@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    
+
     public float velocidade; //declaração de uma variável pública para controlar a velocidade do movimento do player
 
     public float jumpForce; //força do pulo 
@@ -11,23 +11,28 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rig; //referencia rigidbody para aplicar fisica
 
-    //método Start é chamado uma vez quando o script é iniciado
+    private GameObject coinColetar;
+
     void Start()
     {
         //pega o componente Rigidbody2D anexado ao GameObject
         rig = GetComponent<Rigidbody2D>();
     }
 
-    // O método Update é chamado toda vez que um frame novo acontece (ou seja, o tempo todo enquanto o jogo roda).
     void Update()
     {
-        
+
         Move(); //chama o método Move a cada frame para atualizar o movimento do player
-        
+
         Jump(); //chama o metodo jump a cada frame
+
+        if (Input.GetKeyDown(KeyCode.W) && coinColetar != null)
+        {
+             CollectCoin();
+        }
     }
 
-        void Move() // Esse método aqui cuida do movimento do personagem.
+    void Move() // Esse método aqui cuida do movimento do personagem.
 
     {
         // Aqui a gente pega o input do teclado: seta esquerda, seta direita, A ou D.
@@ -54,7 +59,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    
+
     void Jump() //é chamado quando o jogador clicar espaço (tentar pular)
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -79,21 +84,43 @@ public class Player : MonoBehaviour
         }
     }
 
-     // Detecta quando o personagem toca no chão
-        void OnCollisionEnter2D(Collision2D collision)
+    // Detecta quando o personagem toca no chão
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Chão"))
         {
-            if (collision.gameObject.CompareTag("Chão"))
-            {
-                isJump = false;
-            }
+            isJump = false;
         }
+    }
 
-        // Detecta quando o personagem sai do chão
-        void OnCollisionExit2D(Collision2D collision)
+    // Detecta quando o personagem sai do chão
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Chão"))
         {
-            if (collision.gameObject.CompareTag("Chão"))
+            isJump = true;
+        }
+    }
+
+    private void CollectCoin()
+    {
+        Destroy(coinColetar);
+        coinColetar = null;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag("Coin"))
             {
-                isJump = true;
+                coinColetar = other.gameObject;
             }
         }
+        
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Coin") && other.gameObject == coinColetar)
+        {
+            coinColetar = null;
+        }
+    }
 }
