@@ -2,24 +2,33 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    //declaração de uma variável pública para controlar a velocidade do movimento do player
-    public float velocidade;
+    
+    public float velocidade; //declaração de uma variável pública para controlar a velocidade do movimento do player
+
+    public float jumpForce; //força do pulo 
+    public bool isJump; //indica se o personagem esta no ar
+    public bool doubleJump; //indica se o personagem pode realizar um segundo pulo
+
+    private Rigidbody2D rig; //referencia rigidbody para aplicar fisica
 
     //método Start é chamado uma vez quando o script é iniciado
     void Start()
     {
-
+        //pega o componente Rigidbody2D anexado ao GameObject
+        rig = GetComponent<Rigidbody2D>();
     }
 
     // O método Update é chamado toda vez que um frame novo acontece (ou seja, o tempo todo enquanto o jogo roda).
     void Update()
     {
-        //chama o método Move a cada frame para atualizar o movimento do player
-        Move();
+        
+        Move(); //chama o método Move a cada frame para atualizar o movimento do player
+        
+        Jump(); //chama o metodo jump a cada frame
     }
 
-    // Esse método aqui cuida do movimento do personagem.
-    void Move()
+        void Move() // Esse método aqui cuida do movimento do personagem.
+
     {
         // Aqui a gente pega o input do teclado: seta esquerda, seta direita, A ou D.
         // GetAxisRaw é mais direto – retorna -1 se for pra esquerda, 1 pra direita e 0 se nada for pressionado.
@@ -43,10 +52,48 @@ public class Player : MonoBehaviour
             // ...viramos ele pra esquerda (gira no eixo Y).
             transform.eulerAngles = new Vector3(0f, 180f, 0f);
         }
-
-        /*if (Input.GetAxis("Horizontal") == of)
-        {
-            ele vai parar 
-        }*/
     }
+
+    
+    void Jump() //é chamado quando o jogador clicar espaço (tentar pular)
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (isJump == false)
+            {
+                //aplica força para cima, primeiro pulo
+                rig.AddForce(new Vector3(0f, jumpForce), ForceMode2D.Impulse);
+                doubleJump = true; //permite o segundo pulo
+            }
+
+            else
+            {
+                //se já esta no ar e o duplo pulo esta liberado
+                if (doubleJump)
+                {
+                    //executa o segundo pulo
+                    rig.AddForce(new Vector3(0f, jumpForce), ForceMode2D.Impulse);
+                    doubleJump = false; //não pode mais pular
+                }
+            }
+        }
+    }
+
+     // Detecta quando o personagem toca no chão
+        void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Chão"))
+            {
+                isJump = false;
+            }
+        }
+
+        // Detecta quando o personagem sai do chão
+        void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Chão"))
+            {
+                isJump = true;
+            }
+        }
 }

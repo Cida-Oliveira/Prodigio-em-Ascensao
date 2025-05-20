@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidade: 5
+  jumpForce: 3
+  isJump: 0
+  doubleJump: 0
 --- !u!50 &256282481
 Rigidbody2D:
   serializedVersion: 5
@@ -656,5 +659,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
-  - {fileID: 559962108}
   - {fileID: 256282484}
+  - {fileID: 559962108}
