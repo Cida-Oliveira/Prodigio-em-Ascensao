@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-     public Transform player;
+    public Transform player;
     public float minX, maxX;
     public float timeLerp;
 
