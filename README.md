@@ -1,2 +1,2 @@
 # TCC-Prodígio em Ascensão
-TCC de Marco e Cida
+TCC do Curso de Programação de Jogos Digitais
