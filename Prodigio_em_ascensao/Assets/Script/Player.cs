@@ -69,6 +69,7 @@ public class Player : MonoBehaviour
                 //aplica força para cima, primeiro pulo
                 rig.AddForce(new Vector3(0f, jumpForce), ForceMode2D.Impulse);
                 doubleJump = true; //permite o segundo pulo
+                 isJump = true; //marca como no ar
             }
 
             else
@@ -90,6 +91,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Chão"))
         {
             isJump = false;
+            doubleJump = false; // reseta o double jump ao tocar no chão
         }
     }
 
